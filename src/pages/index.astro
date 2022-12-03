@@ -1,0 +1,72 @@
+---
+import Houston from "../components/Houston.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <main>
+      <Houston />
+
+      <div class="controls">
+        <select onChange="updatePose(event)">
+            <option value="default" selected>Default</option>
+            <option value="happy">Happy</option>
+            <option value="disappointed">Disappointed</option>
+            <option value="shocked">Shocked</option>
+            <option value="love">Love</option>
+            <option value="grumpy">Grumpy</option>
+            <option value="sad">Sad</option>
+            <option value="wink">Wink</option>
+        </select>
+
+        <button onClick="talk()">Talk</button>
+
+        <script is:inline> 
+            const houston = document.querySelector('hey-houston');
+            function updatePose(event) {
+                houston.setAttribute('pose', event.target.value);
+            }
+            function talk() {
+                houston.reset();
+                const h = houston.talk()
+                setTimeout(h.stop, 3000);
+            }
+        </script>
+      </div>
+    </main>
+
+    <style>
+      body {
+        padding: 2rem 1rem;
+        background: #17191E;
+        color-scheme: dark;
+      }
+      main {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .controls {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      select, button {
+        padding: 0.25rem 0.5rem;
+      }
+    </style>
+
+  </body>
+</html>
