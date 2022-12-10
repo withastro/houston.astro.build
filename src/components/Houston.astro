@@ -10,12 +10,18 @@ interface Props {
     | "sad"
     | "wink";
   scale?: number;
+  theme?: "default" | "mono";
+  glow?: boolean;
 }
 
-const { pose, scale } = Astro.props;
+const { pose, glow = false, theme = "default", scale = 1 } = Astro.props;
 ---
 
-<hey-houston pose={pose} style={{ "--scale": scale ?? 1 }}>
+<hey-houston
+  class:list={{ glow, [`theme-${theme}`]: theme !== "default" }}
+  pose={pose}
+  style={{ "--scale": scale }}
+>
   <div class="container">
     <div class="body">
       <div class="face">
@@ -197,6 +203,20 @@ const { pose, scale } = Astro.props;
     );
     --border-width: calc(
       clamp(0.31rem, calc(0.21rem + 0.52vw), 0.63rem) * var(--scale)
+    );
+    --border-color: conic-gradient(
+      from var(--deg, 0deg) at 50% 50%,
+      #3245ff 0deg,
+      #bc52ee 102deg,
+      #4af2c8 150deg,
+      #4af2c8 200deg,
+      #3245ff 360deg
+    );
+    --body-color: radial-gradient(
+      80% 80% at 50% 37.5%,
+      #191c24 33%,
+      #111218 67%,
+      #040506 100%
     );
     color: white;
     position: relative;
@@ -929,7 +949,12 @@ const { pose, scale } = Astro.props;
       100% 0
     );
   }
-  hey-houston::before {
+  .theme-mono {
+    --border-color: white;
+    --body-color: #17191e;
+  }
+  hey-houston::before,
+  .glow::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -938,16 +963,16 @@ const { pose, scale } = Astro.props;
     justify-content: center;
     aspect-ratio: 128 / 96;
     width: var(--size);
-    background: conic-gradient(
-      from var(--deg, 0deg) at 50% 50%,
-      #3245ff 0deg,
-      #bc52ee 102deg,
-      #4af2c8 150deg,
-      #4af2c8 200deg,
-      #3245ff 360deg
-    );
+    background: var(--border-color);
     clip-path: var(--border-squircle);
     animation: floating 6s 0.3s ease-in-out infinite;
+  }
+  .glow::after {
+    filter: blur(12px);
+    border-radius: calc(var(--border-width) * 3);
+    clip-path: initial;
+    z-index: -1;
+    opacity: 0.8;
   }
   .container {
     display: flex;
@@ -955,14 +980,7 @@ const { pose, scale } = Astro.props;
     justify-content: center;
     aspect-ratio: 128 / 96;
     width: var(--size);
-    background: conic-gradient(
-      from var(--deg, 0deg) at 50% 50%,
-      #3245ff 0deg,
-      #bc52ee 102deg,
-      #4af2c8 150deg,
-      #4af2c8 200deg,
-      #3245ff 360deg
-    );
+    background: var(--border-color);
     clip-path: var(--border-squircle);
     animation: floating 6s cubic-bezier(0.76, 0, 0.24, 1) infinite;
   }
@@ -997,12 +1015,7 @@ const { pose, scale } = Astro.props;
     display: flex;
     aspect-ratio: 132 / 96;
     width: calc(100% - calc(var(--border-width) * 2));
-    background: radial-gradient(
-      80% 80% at 50% 37.5%,
-      #191c24 33%,
-      #111218 67%,
-      #040506 100%
-    );
+    background: var(--body-color);
     clip-path: var(--border-squircle-inner);
   }
   .face {
