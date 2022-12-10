@@ -1,4 +1,21 @@
-<hey-houston>
+---
+interface Props {
+  pose?:
+    | "default"
+    | "happy"
+    | "disappointed"
+    | "shocked"
+    | "love"
+    | "grumpy"
+    | "sad"
+    | "wink";
+  scale?: number;
+}
+
+const { pose, scale } = Astro.props;
+---
+
+<hey-houston pose={pose} style={{ "--scale": scale ?? 1 }}>
   <div class="container">
     <div class="body">
       <div class="face">
@@ -37,10 +54,15 @@
     "circle-small",
     "square-small",
   ];
-  const randBetween = (from, to) => from + Math.floor(Math.random() * to);
-  const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+  const randBetween = (from: number, to: number) =>
+    from + Math.floor(Math.random() * to);
+  const lerp = (start: number, end: number, amt: number) =>
+    (1 - amt) * start + amt * end;
 
   class HeyHouston extends HTMLElement {
+    private _rect!: DOMRect;
+    private _handle?: number;
+
     constructor() {
       super();
       this.onPointerMove = this.onPointerMove.bind(this);
@@ -58,7 +80,7 @@
       this.removeEventListener("pointermove", this.onPointerMove);
     }
 
-    onPointerMove(event) {
+    onPointerMove(event: PointerEvent) {
       const x = (event.clientX - this._rect.x) / this._rect.width - 0.5;
       const y = (event.clientY - this._rect.y) / this._rect.height - 0.5;
       const deltaX = 0 - x;
@@ -85,40 +107,42 @@
     }
 
     get eye0() {
-      return this.querySelector(".eye:first-child");
+      return this.querySelector(".eye:first-child")! as HTMLElement;
     }
 
     get mouth() {
-      return this.querySelector(".mouth");
+      return this.querySelector(".mouth")! as HTMLElement;
     }
 
     get eye1() {
-      return this.querySelector(".eye:last-child");
+      return this.querySelector(".eye:last-child")! as HTMLElement;
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
       if (name === "shapes") {
         this.updateShapes(newValue);
       }
       if (name === "pose") {
-        const shapes = poses[newValue] ?? poses.default;
+        const shapes = poses[newValue as keyof typeof poses] ?? poses.default;
         this.updateShapes(shapes);
       }
     }
 
     reset() {
       if (this._handle) clearTimeout(this._handle);
-      this.updateShapes(poses[this.getAttribute("pose")] ?? poses.default);
+      this.updateShapes(
+        poses[(this.getAttribute("pose") as keyof typeof poses) ?? "default"]
+      );
     }
 
-    updateShapes(value) {
+    updateShapes(value: string) {
       const [eye0, mouth, eye1] = value.split(" ");
       this.eye0.dataset.shape = eye0;
       this.mouth.dataset.shape = mouth;
       this.eye1.dataset.shape = eye1;
     }
 
-    emote(name) {
+    emote(name: keyof typeof poses) {
       const shapes = poses[name] ?? poses.default;
       this.updateShapes(shapes);
       this._handle = setTimeout(() => {
@@ -142,13 +166,22 @@
           i = 0;
         }
         this.mouth.dataset.shape = mouths[randBetween(0, mouths.length - 1)];
-        this._handle = setTimeout(() => loop(), randBetween(100, 200));
+        this._handle = setTimeout(() => loop(), randBetween(100, 300));
       };
 
       loop();
 
       return {
         stop: () => this.reset(),
+      };
+    }
+
+    think() {
+      this.classList.add("loading");
+      return {
+        stop: () => {
+          this.classList.remove("loading");
+        },
       };
     }
   }
@@ -158,13 +191,14 @@
 
 <style>
   hey-houston {
-    --scale: 2;
+    --scale: 1;
     --size: calc(
       clamp(6.25rem, calc(3.75rem + 12.5vw), 13.75rem) * var(--scale)
     );
     --border-width: calc(
       clamp(0.31rem, calc(0.21rem + 0.52vw), 0.63rem) * var(--scale)
     );
+    color: white;
     position: relative;
     aspect-ratio: 128 / 96;
     width: var(--size);
@@ -941,6 +975,15 @@
       transform: translateY(calc(var(--border-width) * -1.5));
     }
   }
+  @keyframes fade {
+    from,
+    to {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
   hey-houston * {
     box-sizing: border-box;
   }
@@ -975,10 +1018,33 @@
   hey-houston:hover .face {
     transform: translate(calc(var(--x) * 5%), calc(var(--y) * 25%));
   }
+  .loading .face {
+    --delay: 175ms;
+    transform: translate(0, -25%);
+  }
+  .loading :is(.eye, .mouth) {
+    all: initial;
+    aspect-ratio: 1;
+    background: white;
+    margin: 17.5% auto;
+    width: calc(var(--border-width) * 2);
+    border-radius: calc(var(--border-width) / 4);
+    animation: floating 1s cubic-bezier(0.76, 0, 0.24, 1) infinite,
+      fade 1s ease-in-out infinite;
+  }
+  .loading :is(.eye:first-child) {
+    animation-delay: 0;
+  }
+  .loading :is(.mouth) {
+    animation-delay: calc(var(--delay) * 1);
+  }
+  .loading :is(.eye:last-child) {
+    animation-delay: calc(var(--delay) * 2);
+  }
   .eye,
   .mouth {
     aspect-ratio: 1;
-    background: white;
+    background: currentColor;
     margin: 17.5%;
   }
   [data-shape^="circle"] {
@@ -992,23 +1058,23 @@
   }
   [data-shape^="circle-stroke"] {
     background: none;
-    border: calc(var(--border-width) * 0.67) solid white;
+    border: calc(var(--border-width) * 0.67) solid currentColor;
   }
   [data-shape^="bar"] {
     aspect-ratio: 80 / 24;
-    border-radius: var(--border-width);
+    border-radius: calc(var(--border-width) / 2);
   }
   [data-shape^="square"] {
-    border-radius: var(--border-width);
+    border-radius: calc(var(--border-width) / 2);
     transform: scale(0.9);
   }
   [data-shape$="small"] {
-    transform: scale(0.67);
+    transform: scale(0.55);
   }
   [data-shape^="half"] {
     aspect-ratio: 2 / 1;
     background: none;
-    border: calc(var(--border-width) * 0.67) solid white;
+    border: calc(var(--border-width) * 0.67) solid currentColor;
   }
   [data-shape^="half-up"] {
     border-bottom-left-radius: 999px;
