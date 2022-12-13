@@ -15,7 +15,12 @@ interface Props {
   glow?: boolean;
 }
 
-const { pose, glow = false, theme = "default", scale = 1 } = Astro.props;
+const {
+  pose = "default",
+  glow = false,
+  theme = "default",
+  scale = 1,
+} = Astro.props;
 ---
 
 <hey-houston
