@@ -8,6 +8,7 @@ interface Props {
     | "love"
     | "grumpy"
     | "sad"
+    | "cry"
     | "wink";
   scale?: number;
   theme?: "default" | "mono";
@@ -42,6 +43,7 @@ const { pose, glow = false, theme = "default", scale = 1 } = Astro.props;
     love: "heart half-up heart",
     grumpy: "bar-top half-down bar-top",
     sad: "circle half-down-bottom circle",
+    cry: "half-down square half-down",
     wink: "circle half-up bar",
   };
   const eyes = [
@@ -1028,6 +1030,35 @@ const { pose, glow = false, theme = "default", scale = 1 } = Astro.props;
     transform: translate(0, 0);
     transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1);
   }
+  [pose="cry"] .eye {
+    z-index: 1;
+    border: 0;
+    background: linear-gradient(to bottom, #3245ff, #4af2c8);
+  }
+  [pose="cry"] .eye::before {
+    content: "";
+    display: block;
+    position: relative;
+    width: calc(100% - var(--border-width));
+    height: calc(var(--border-width) * 8);
+    margin: 0 auto;
+  }
+  [pose="cry"] .eye::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    width: calc(100% - calc(var(--border-width) * 2));
+    height: var(--border-width);
+    margin: 0 auto;
+    border: var(--border-width) solid currentColor;
+    border-top-left-radius: 999px;
+    border-top-right-radius: 999px;
+    border-bottom: 0;
+  }
+  [pose="cry"] .mouth {
+    align-self: flex-start;
+  }
   hey-houston:hover .face {
     transform: translate(calc(var(--x) * 5%), calc(var(--y) * 25%));
   }
@@ -1056,6 +1087,7 @@ const { pose, glow = false, theme = "default", scale = 1 } = Astro.props;
   }
   .eye,
   .mouth {
+    position: relative;
     aspect-ratio: 1;
     background: currentColor;
     margin: 17.5%;
