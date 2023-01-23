@@ -2,9 +2,11 @@ lockfileVersion: 5.4
 
 specifiers:
   astro: 2.0.0-beta.3
+  snarkdown: ^2.0.0
 
 dependencies:
   astro: 2.0.0-beta.3
+  snarkdown: 2.0.0
 
 packages:
 
@@ -2468,6 +2470,10 @@ packages:
   /slash/4.0.0:
     resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}
     engines: {node: '>=12'}
+    dev: false
+
+  /snarkdown/2.0.0:
+    resolution: {integrity: sha512-MgL/7k/AZdXCTJiNgrO7chgDqaB9FGM/1Tvlcenenb7div6obaDATzs16JhFyHHBGodHT3B7RzRc5qk8pFhg3A==}
     dev: false
 
   /source-map-js/1.0.2:

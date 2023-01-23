@@ -76,6 +76,7 @@ import Houston from "../components/Houston.astro";
         color-scheme: dark;
         height: 100vh;
         height: 100dvh;
+        line-height: 1.33;
       }
       body::before {
         position: absolute;
@@ -116,7 +117,7 @@ import Houston from "../components/Houston.astro";
       .intro {
         font-size: 1.5rem;
         color: white;
-        transition: opacity 500ms ease-out forwards;
+        transition: opacity 500ms ease-out;
       }
       .intro p {
         margin: 0;
@@ -233,6 +234,15 @@ import Houston from "../components/Houston.astro";
       hey-houston {
         z-index: 2;
       }
+      code {
+        font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono",
+          "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
+          "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New",
+          monospace;
+        padding: 0.125em 0.33em;
+        border-radius: 0.33em;
+        font-size: 0.95rem;
+      }
       .chat > li {
         --radius: 0.5rem;
         position: relative;
@@ -250,22 +260,28 @@ import Houston from "../components/Houston.astro";
         border-bottom-right-radius: 0;
         color: white;
       }
+      .chat > li[data-user] code {
+        background: rgba(255 255 255 / 0.15);
+      }
       .chat > li:not([data-user]) {
         background: linear-gradient(0deg, #ffffff -0.35%, #bfc1c9 102.26%);
         border-bottom-left-radius: 0;
         grid-column: 1 / span 4;
+      }
+      .chat > li:not([data-user]) code {
+        background: rgba(0 0 0 / 0.075);
       }
 
       .sources {
         margin-top: 1rem;
         font-size: 0.9rem;
         display: flex;
-        flex-direction: column;
+        flex-flow: column;
+        gap: 0.33em;
       }
       .sources > a {
         display: block;
         color: #23262d;
-        margin-top: 0.25em;
       }
       .sources > a:is(:hover, :focus) {
         color: rgba(23, 25, 30, 1);
@@ -301,6 +317,7 @@ import Houston from "../components/Houston.astro";
 
     <script>
       import { chat } from "../chat";
+      import snarkdown from "snarkdown";
 
       const header = document.querySelector("header")!;
       const houston = document.querySelector("hey-houston")!;
@@ -317,7 +334,7 @@ import Houston from "../components/Houston.astro";
           if (child instanceof Node) {
             node.appendChild(child);
           } else if (child || child === 0) {
-            node.appendChild(document.createTextNode(String(child)));
+            node.innerHTML = child;
           }
         }
         return node;
@@ -340,7 +357,7 @@ import Houston from "../components/Houston.astro";
         const textarea = form.message as HTMLTextAreaElement;
         const message = textarea.value;
 
-        const bubble = h("li", { "data-user": "" }, message);
+        const bubble = h("li", { "data-user": "" }, snarkdown(message));
         messages.appendChild(bubble);
         bubble.scrollIntoView();
         header.classList.add("inactive");
@@ -352,19 +369,19 @@ import Houston from "../components/Houston.astro";
         let emote: string = "default";
         try {
           const res = await chat(message);
-          emote = res ? "haapy" : "disappointed";
-          if (!res) {
+          emote = res.valid ? "haapy" : "disappointed";
+          if (!res.valid) {
             const bubble = h("li", { class: "defer" }, `${rand(avoid)}`);
             messages.appendChild(bubble);
             bubble.scrollIntoView();
           } else {
-            const sources = res.sources.map(([source, title]) =>
-              h("a", { href: source }, title)
+            const sources = res.sources.map(({ url, title }) =>
+              h("a", { target: "_blank", href: url }, title)
             );
             const bubble = h(
               "li",
               {},
-              res.answer,
+              snarkdown(res.answer),
               sources.length > 0
                 ? h("div", { class: "sources" }, ...sources)
                 : undefined
