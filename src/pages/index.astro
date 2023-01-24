@@ -349,6 +349,12 @@ import Houston from "../components/Houston.astro";
       .chat > .message:not([data-user]) code {
         background: rgba(0 0 0 / 0.075);
       }
+      .message a {
+        color: #3245ff;
+      }
+      .message a:where(:visited) {
+        color: #bc52ee;
+      }
 
       .sources {
         margin-top: 1rem;
