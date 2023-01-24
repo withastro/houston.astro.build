@@ -14,8 +14,8 @@ import Houston from "../components/Houston.astro";
     <header class="container">
       <Houston glow />
       <div class="intro">
-        <p>Hey! <strong>I'm Houston.</strong></p>
-        <p>How can I help?</p>
+        <p>Hey! I'm <strong>Houston</strong></p>
+        <p>Ask me anything about Astro</p>
       </div>
     </header>
     <main class="container">
@@ -55,6 +55,42 @@ import Houston from "../components/Houston.astro";
         </div>
       </form>
     </footer>
+    <template id="thumbs">
+      <li class="thumbs">
+        <button>
+          <span
+            ><svg
+              width="32"
+              height="33"
+              viewBox="0 0 32 33"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Thumbs Up</title>
+              <path
+                d="M26.745 10H20V8C20 5.2425 17.7575 3 15 3C14.6213 3 14.275 3.21375 14.105 3.5525L9.3825 13H4C2.8975 13 2 13.8975 2 15V26C2 27.1025 2.8975 28 4 28H25.2425C26.7438 27.9925 28.0175 26.865 28.205 25.3738L29.7038 13.3825C29.7213 13.25 29.73 13.115 29.73 12.98C29.7262 11.335 28.3863 10 26.745 10ZM3.99875 15H9V26H4V15H3.99875ZM27.7188 13.1263L26.2188 25.125C26.1562 25.6213 25.7312 25.9975 25.2362 26H11V14.2362L15.5887 5.0575C16.9625 5.3325 18 6.54625 18 8V11C18 11.5525 18.4475 12 19 12H26.7425C27.005 12 27.2525 12.1025 27.4387 12.2875C27.6262 12.4738 27.7287 12.7212 27.73 12.985C27.73 13.03 27.7275 13.0738 27.72 13.125L27.7188 13.1263Z"
+                fill="currentColor"></path>
+            </svg>
+          </span>
+        </button>
+        <button>
+          <span
+            ><svg
+              width="32"
+              height="33"
+              viewBox="0 0 32 33"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Thumbs Down</title>
+              <path
+                d="M29.705 20.6263L28.205 8.625C28.0175 7.135 26.7437 6.0075 25.2375 6H4C2.8975 6 2 6.8975 2 8V19C2 20.1025 2.8975 21 4 21H9.3825L14.1062 30.4475C14.275 30.7863 14.6213 31 15.0013 31C17.7588 31 20.0012 28.7575 20.0012 26V24H26.7437C27.5387 24 28.2875 23.6912 28.8512 23.13C29.4162 22.5675 29.73 21.8175 29.7313 21.02C29.7313 20.885 29.7225 20.75 29.7062 20.6263H29.705ZM9 19H4V8H9V19ZM27.4387 21.7125C27.2512 21.8987 27.0012 21.995 26.7375 22H19C18.4475 22 18 22.4475 18 23V26C18 27.4525 16.9625 28.6675 15.5887 28.9425L11 19.765V8H25.2325C25.7325 8.0025 26.1575 8.37875 26.22 8.87375L27.7213 20.8825C27.7275 20.9262 27.73 20.97 27.73 21.015C27.73 21.2788 27.6262 21.5262 27.4387 21.7125Z"
+                fill="currentColor"></path>
+            </svg>
+          </span>
+        </button>
+      </li>
+    </template>
 
     <style>
       :root {
@@ -98,6 +134,7 @@ import Houston from "../components/Houston.astro";
         margin-right: auto;
       }
       header {
+        flex-grow: 1;
         position: relative;
         margin: 4rem;
         margin-top: 4rem;
@@ -107,6 +144,12 @@ import Houston from "../components/Houston.astro";
         justify-content: center;
         align-items: center;
         margin-bottom: 0;
+      }
+      header.inactive {
+        flex-grow: 0;
+      }
+      header.inactive + main {
+        flex-grow: 1;
       }
       header.inactive .intro {
         display: none;
@@ -126,9 +169,14 @@ import Houston from "../components/Houston.astro";
       .intro p:first-child {
         font-size: 2rem;
         margin-top: 2rem;
+      }
+      .intro strong {
         background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+      }
+      .intro p:last-child {
+        color: rgba(133, 139, 152, 1);
       }
       header::after {
         content: "";
@@ -141,7 +189,6 @@ import Houston from "../components/Houston.astro";
         z-index: 1;
       }
       main {
-        flex-grow: 1;
         padding-top: var(--chat-padding-top);
         padding-left: 1rem;
         padding-right: 1rem;
@@ -198,7 +245,7 @@ import Houston from "../components/Houston.astro";
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
           Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
           sans-serif;
-        font-size: 1rem;
+        font-size: 1.33rem;
         line-height: 1.25;
         border: 1px solid #343841;
         margin-left: -1px;
@@ -243,7 +290,7 @@ import Houston from "../components/Houston.astro";
         border-radius: 0.33em;
         font-size: 0.95rem;
       }
-      .chat > li {
+      .chat > .message {
         --radius: 1.75rem;
         position: relative;
         border-radius: var(--radius);
@@ -251,7 +298,7 @@ import Houston from "../components/Houston.astro";
         padding: 1rem 1.5rem;
         animation: fade-in 300ms ease-out forwards;
       }
-      .chat > li::after {
+      .chat > .message::after {
         --size: 1rem;
         content: "";
         position: absolute;
@@ -260,16 +307,16 @@ import Houston from "../components/Houston.astro";
         width: var(--size);
         z-index: 2;
       }
-      .chat > li.defer {
+      .chat > .message.defer {
         animation: fade-in 300ms ease-out forwards,
           shake 400ms 150ms ease-out forwards;
       }
-      .chat > li[data-user] {
+      .chat > .message[data-user] {
         background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
         border-bottom-right-radius: 0;
         color: white;
       }
-      .chat > li[data-user]::after {
+      .chat > .message[data-user]::after {
         background: #bc52ee;
         right: calc(var(--size) * -1);
         border-bottom-right-radius: 8rem;
@@ -280,7 +327,7 @@ import Houston from "../components/Houston.astro";
           #bc52ee var(--size)
         );
       }
-      .chat > li:not([data-user])::after {
+      .chat > .message:not([data-user])::after {
         border-top-left-radius: var(--size);
         border-bottom-left-radius: 8rem;
         background: radial-gradient(
@@ -291,15 +338,15 @@ import Houston from "../components/Houston.astro";
         );
         left: calc(var(--size) * -1);
       }
-      .chat > li[data-user] code {
+      .chat > .message[data-user] code {
         background: rgba(255 255 255 / 0.15);
       }
-      .chat > li:not([data-user]) {
+      .chat > .message:not([data-user]) {
         background: linear-gradient(180deg, #ffffff, #d6d8e2);
         border-bottom-left-radius: 0;
         grid-column: 1 / span 4;
       }
-      .chat > li:not([data-user]) code {
+      .chat > .message:not([data-user]) code {
         background: rgba(0 0 0 / 0.075);
       }
 
@@ -352,6 +399,9 @@ import Houston from "../components/Houston.astro";
 
       const header = document.querySelector("header")!;
       const houston = document.querySelector("hey-houston")!;
+      // const thumbs = document.querySelector(
+      //   "template#thumbs"
+      // )! as HTMLTemplateElement;
       const h = (
         tag: string,
         props: Record<string, any> = {},
@@ -389,7 +439,11 @@ import Houston from "../components/Houston.astro";
         const message = textarea.value;
         if (!message.trim()) return;
 
-        const bubble = h("li", { "data-user": "" }, snarkdown(message));
+        const bubble = h(
+          "li",
+          { class: "message", "data-user": "" },
+          snarkdown(message)
+        );
         messages.appendChild(bubble);
         bubble.scrollIntoView();
         header.classList.add("inactive");
@@ -403,7 +457,11 @@ import Houston from "../components/Houston.astro";
           const res = await chat(message);
           emote = res.valid ? "haapy" : "disappointed";
           if (!res.valid) {
-            const bubble = h("li", { class: "defer" }, `${rand(avoid)}`);
+            const bubble = h(
+              "li",
+              { class: "message defer" },
+              `${rand(avoid)}`
+            );
             messages.appendChild(bubble);
             bubble.scrollIntoView();
           } else {
@@ -412,21 +470,22 @@ import Houston from "../components/Houston.astro";
             );
             const bubble = h(
               "li",
-              {},
+              { class: "message" },
               snarkdown(res.answer),
               sources.length > 0
                 ? h("div", { class: "sources" }, ...sources)
                 : undefined
             );
             messages.appendChild(bubble);
+            // messages.appendChild(thumbs.content.cloneNode(true));
             bubble.scrollIntoView();
           }
         } catch (err) {
           emote = "cry";
           const bubble = h(
             "li",
-            { class: "error" },
-            `Uh oh, something went wrong!`
+            { class: "message error" },
+            `Something went wrong! Please try again.`
           );
           messages.appendChild(bubble);
           bubble.scrollIntoView();
