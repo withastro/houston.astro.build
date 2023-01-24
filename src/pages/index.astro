@@ -387,6 +387,7 @@ import Houston from "../components/Houston.astro";
         const form = event.target as HTMLFormElement;
         const textarea = form.message as HTMLTextAreaElement;
         const message = textarea.value;
+        if (!message.trim()) return;
 
         const bubble = h("li", { "data-user": "" }, snarkdown(message));
         messages.appendChild(bubble);
