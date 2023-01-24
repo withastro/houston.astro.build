@@ -11,53 +11,72 @@ import Houston from "../components/Houston.astro";
     <title>Houston</title>
   </head>
   <body>
-    <main>
+    <header class="container">
       <Houston glow />
-
-      <div class="controls">
-        <select onchange="updatePose(event)">
-          <option value="default" selected>Default</option>
-          <option value="happy">Happy</option>
-          <option value="disappointed">Disappointed</option>
-          <option value="shocked">Shocked</option>
-          <option value="love">Love</option>
-          <option value="grumpy">Grumpy</option>
-          <option value="sad">Sad</option>
-          <option value="wink">Wink</option>
-        </select>
-
-        <button onclick="talk()">Talk</button>
-
-        <button onclick="think()">Think</button>
-
-        <script is:inline>
-          const houston = document.querySelector("hey-houston");
-          function updatePose(event) {
-            houston.setAttribute("pose", event.target.value);
-          }
-          function talk() {
-            houston.reset();
-            const h = houston.talk();
-            setTimeout(h.stop, 3000);
-          }
-          function think() {
-            houston.reset();
-            const h = houston.think();
-            setTimeout(h.stop, 3000);
-          }
-        </script>
+      <div class="intro">
+        <p>Hey! <strong>I'm Houston.</strong></p>
+        <p>How can I help?</p>
       </div>
+    </header>
+    <main class="container">
+      <ul class="chat"></ul>
     </main>
+    <footer class="container">
+      <form action="#" onsubmit="handleSubmit(event)">
+        <div class="autogrow">
+          <textarea
+            id="message"
+            name="message"
+            onkeydown="handleKeydown(event)"
+            oninput="this.parentNode.dataset.value = this.value"
+            placeholder="How can I help?"
+            cols="30"></textarea>
+          <button type="submit">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Send</title>
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M5.64161 2.18531C6.04591 2.14469 6.453 2.22818 6.80868 2.42468L6.81379 2.4275L27.9217 14.25L27.9244 14.2515C28.2358 14.4244 28.4954 14.6774 28.6764 14.9842C28.8578 15.292 28.9535 15.6427 28.9535 16C28.9535 16.3572 28.8578 16.708 28.6764 17.0157C28.4954 17.3226 28.2358 17.5756 27.9244 17.7485L27.9217 17.75L6.80869 29.5753C6.45301 29.7718 6.04591 29.8553 5.64161 29.8147C5.2373 29.774 4.85495 29.6112 4.54548 29.3479C4.236 29.0846 4.01408 28.7332 3.90925 28.3406C3.80455 27.9485 3.82162 27.5338 3.95818 27.1517L7.93379 16L3.95868 4.84968C3.82192 4.46735 3.8045 4.05166 3.90925 3.65933C4.01408 3.26675 4.236 2.9154 4.54548 2.65208C4.85496 2.38875 5.2373 2.22594 5.64161 2.18531ZM27.4376 15.125L26.9489 15.9975L5.84155 4.17529L5.84205 4.17668L9.8113 15.3106C9.98396 15.7539 9.98396 16.246 9.8113 16.6894L5.84155 27.8247L26.9489 16.0025L26.9535 16L27.4376 15.125Z"
+                fill="currentColor"></path>
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M8 16C8 15.4477 8.44772 15 9 15H17C17.5523 15 18 15.4477 18 16C18 16.5523 17.5523 17 17 17H9C8.44772 17 8 16.5523 8 16Z"
+                fill="currentColor"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </footer>
 
     <style>
+      :root {
+        --container-width: 640px;
+        --chat-padding-top: 3rem;
+      }
       :global(*) {
         box-sizing: border-box;
       }
       body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        display: flex;
+        flex-direction: column;
         margin: 0;
         position: relative;
         background: #17191e;
         color-scheme: dark;
+        height: 100vh;
+        height: 100dvh;
+        line-height: 1.33;
       }
       body::before {
         position: absolute;
@@ -71,27 +90,361 @@ import Houston from "../components/Houston.astro";
         background-repeat: repeat;
         pointer-events: none;
       }
-      main {
-        height: 100vh;
-        height: 100dvh;
-        padding: 2rem 1rem;
+
+      .container {
+        width: 100%;
+        max-width: var(--container-width);
+        margin-left: auto;
+        margin-right: auto;
+      }
+      header {
+        position: relative;
+        margin: 4rem;
+        margin-top: 4rem;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        text-align: center;
         justify-content: center;
+        align-items: center;
+        margin-bottom: 0;
+      }
+      header.inactive .intro {
+        display: none;
+        opacity: 0;
+        pointer-events: none;
+        user-select: none;
+      }
+      .intro {
+        font-size: 1.5rem;
+        color: white;
+        transition: opacity 500ms ease-out;
+      }
+      .intro p {
+        margin: 0;
+        margin-top: 0.5em;
+      }
+      .intro p:first-child {
+        font-size: 2rem;
+        margin-top: 2rem;
+        background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      header::after {
+        content: "";
+        position: absolute;
+        height: var(--chat-padding-top);
+        bottom: calc(var(--chat-padding-top) * -1);
+        left: 0;
+        right: 0;
+        background: linear-gradient(to bottom, #17191e, rgba(23, 25, 30, 0));
+        z-index: 1;
+      }
+      main {
+        flex-grow: 1;
+        padding-top: var(--chat-padding-top);
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
         gap: 1rem;
+        overflow-y: auto;
+      }
+      footer {
+        display: flex;
+        position: relative;
       }
 
-      .controls {
-        margin-top: 1rem;
+      footer button {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        --size: 2.5rem;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+        border: 0;
         display: flex;
         align-items: center;
-        gap: 1rem;
+        justify-content: center;
       }
-      select,
+      footer svg {
+        margin-right: -0.25rem;
+      }
+
+      .autogrow {
+        display: grid;
+      }
+      .autogrow::after {
+        content: attr(data-value) " ";
+        white-space: pre-wrap;
+        visibility: hidden;
+        max-height: 25vh;
+      }
+      textarea {
+        resize: none;
+        overflow: hidden;
+      }
+      .autogrow > textarea,
+      .autogrow::after {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        width: 100vw;
+        max-width: var(--container-width);
+        outline: 0;
+        flex-grow: 1;
+        padding: 1rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        font-size: 1rem;
+        line-height: 1.25;
+        border: 1px solid #343841;
+        margin-left: -1px;
+        margin-right: -1px;
+        border-bottom: 0;
+
+        background: #23262d;
+        color: #bfc1c9;
+
+        /* Place on top of each other */
+        grid-area: 1 / 1 / 2 / 2;
+      }
+      .autogrow > textarea:focus {
+        border-color: #bc52ee;
+      }
+
       button {
-        padding: 0.25rem 0.5rem;
+        background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+      }
+
+      .chat {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
       }
     </style>
+
+    <style is:global>
+      hey-houston {
+        z-index: 2;
+      }
+      code {
+        font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono",
+          "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
+          "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New",
+          monospace;
+        padding: 0.125em 0.33em;
+        border-radius: 0.33em;
+        font-size: 0.95rem;
+      }
+      .chat > li {
+        --radius: 1.75rem;
+        position: relative;
+        border-radius: var(--radius);
+        grid-column: span 4 / -1;
+        padding: 1rem 1.5rem;
+        animation: fade-in 300ms ease-out forwards;
+      }
+      .chat > li::after {
+        --size: 1rem;
+        content: "";
+        position: absolute;
+        bottom: 0;
+        height: var(--size);
+        width: var(--size);
+        z-index: 2;
+      }
+      .chat > li.defer {
+        animation: fade-in 300ms ease-out forwards,
+          shake 400ms 150ms ease-out forwards;
+      }
+      .chat > li[data-user] {
+        background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+        border-bottom-right-radius: 0;
+        color: white;
+      }
+      .chat > li[data-user]::after {
+        background: #bc52ee;
+        right: calc(var(--size) * -1);
+        border-bottom-right-radius: 8rem;
+        background: radial-gradient(
+          circle at top right,
+          rgba(0, 0, 0, 0) 0,
+          rgba(0, 0, 0, 0) var(--size),
+          #bc52ee var(--size)
+        );
+      }
+      .chat > li:not([data-user])::after {
+        border-top-left-radius: var(--size);
+        border-bottom-left-radius: 8rem;
+        background: radial-gradient(
+          circle at top left,
+          rgba(0, 0, 0, 0) 0,
+          rgba(0, 0, 0, 0) var(--size),
+          #d6d8e2 var(--size)
+        );
+        left: calc(var(--size) * -1);
+      }
+      .chat > li[data-user] code {
+        background: rgba(255 255 255 / 0.15);
+      }
+      .chat > li:not([data-user]) {
+        background: linear-gradient(180deg, #ffffff, #d6d8e2);
+        border-bottom-left-radius: 0;
+        grid-column: 1 / span 4;
+      }
+      .chat > li:not([data-user]) code {
+        background: rgba(0 0 0 / 0.075);
+      }
+
+      .sources {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        display: flex;
+        flex-flow: column;
+        gap: 0.33em;
+      }
+      .sources > a {
+        display: block;
+        color: #23262d;
+      }
+      .sources > a:is(:hover, :focus) {
+        color: rgba(23, 25, 30, 1);
+      }
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(0.75rem);
+        }
+        50% {
+          transform: translateX(-0.75rem);
+        }
+        75% {
+          transform: translateX(0.75rem);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+    </style>
+
+    <script>
+      import { chat } from "../chat";
+      import snarkdown from "snarkdown";
+
+      const header = document.querySelector("header")!;
+      const houston = document.querySelector("hey-houston")!;
+      const h = (
+        tag: string,
+        props: Record<string, any> = {},
+        ...children: any[]
+      ) => {
+        const node = document.createElement(tag);
+        for (const [key, value] of Object.entries(props)) {
+          node.setAttribute(key, value);
+        }
+        for (const child of children) {
+          if (child instanceof Node) {
+            node.appendChild(child);
+          } else if (child || child === 0) {
+            node.innerHTML = child;
+          }
+        }
+        return node;
+      };
+      const rand = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
+      const messages = document.querySelector(".chat") as HTMLDivElement;
+
+      const avoid = [
+        "Sorry, I'm not sure about that one.",
+        "Hmm... I don't know!",
+        "Huh, that's one even I don't know!",
+        "Wow, that's a tough one...",
+        "Unfortunately, I have no idea.",
+        "Hmm, I'm not sure.",
+      ];
+
+      async function handleSubmit(event: Event) {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const textarea = form.message as HTMLTextAreaElement;
+        const message = textarea.value;
+
+        const bubble = h("li", { "data-user": "" }, snarkdown(message));
+        messages.appendChild(bubble);
+        bubble.scrollIntoView();
+        header.classList.add("inactive");
+
+        textarea.value = "";
+        textarea.focus();
+
+        const thinking = houston.think();
+        let emote: string = "default";
+        try {
+          const res = await chat(message);
+          emote = res.valid ? "haapy" : "disappointed";
+          if (!res.valid) {
+            const bubble = h("li", { class: "defer" }, `${rand(avoid)}`);
+            messages.appendChild(bubble);
+            bubble.scrollIntoView();
+          } else {
+            const sources = res.sources.map(({ url, title }) =>
+              h("a", { target: "_blank", href: url }, title)
+            );
+            const bubble = h(
+              "li",
+              {},
+              snarkdown(res.answer),
+              sources.length > 0
+                ? h("div", { class: "sources" }, ...sources)
+                : undefined
+            );
+            messages.appendChild(bubble);
+            bubble.scrollIntoView();
+          }
+        } catch (err) {
+          emote = "cry";
+          const bubble = h(
+            "li",
+            { class: "error" },
+            `Uh oh, something went wrong!`
+          );
+          messages.appendChild(bubble);
+          bubble.scrollIntoView();
+        } finally {
+          thinking.stop();
+          houston.emote(emote);
+          setTimeout(() => houston.emote("default"), 1250);
+        }
+      }
+
+      function handleKeydown(event: KeyboardEvent) {
+        if (event.shiftKey) return;
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        (event.target as HTMLElement).closest("form")!.requestSubmit();
+      }
+
+      globalThis.handleSubmit = handleSubmit;
+      globalThis.handleKeydown = handleKeydown;
+    </script>
   </body>
 </html>
