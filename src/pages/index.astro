@@ -88,7 +88,7 @@ const meta: Meta = {
         position: absolute;
         content: "";
         mix-blend-mode: overlay;
-        opacity: 0.2;
+        opacity: 0.4;
         inset: 0;
         width: 100%;
         height: 100%;
@@ -248,6 +248,10 @@ const meta: Meta = {
     </style>
 
     <style is:global>
+      ::selection {
+        background: #4af2c8;
+        color: #17191e;
+      }
       hey-houston {
         z-index: 2;
       }
@@ -264,7 +268,7 @@ const meta: Meta = {
         --radius: 1.75rem;
         position: relative;
         border-radius: var(--radius);
-        grid-column: span 4 / -1;
+        grid-column: span 5 / -1;
         padding: 1rem 1.5rem;
         animation: fade-in 300ms ease-out forwards;
       }
@@ -314,7 +318,7 @@ const meta: Meta = {
       .chat > .message:not([data-user]) {
         background: linear-gradient(180deg, #ffffff, #d6d8e2);
         border-bottom-left-radius: 0;
-        grid-column: 1 / span 4;
+        grid-column: 1 / -1;
       }
       .chat > .message:not([data-user]) code {
         background: rgba(0 0 0 / 0.075);
@@ -325,20 +329,48 @@ const meta: Meta = {
       .message a:where(:visited) {
         color: #bc52ee;
       }
-
       .sources {
-        margin-top: 1rem;
+        position: relative;
+        grid-column: 1 / -1;
+        margin-top: 0;
         font-size: 0.9rem;
         display: flex;
         flex-flow: column;
         gap: 0.33em;
+        padding: 1rem 1.5rem;
+        padding-bottom: 1.5rem;
+        color: white;
+      }
+      .sources::before,
+      .sources::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+      .sources::before {
+        z-index: -1;
+        background: #17191e;
+        top: 2px;
+        right: 2px;
+        bottom: 2px;
+        left: 2px;
+      }
+      .sources::after {
+        z-index: -2;
+        background: linear-gradient(247.23deg, #4af2c8 0%, #2f4cb3 100%);
+      }
+      .sources h2 {
+        margin: 0;
       }
       .sources > a {
         display: block;
-        color: #23262d;
+        color: rgba(255, 255, 255, 0.8);
       }
       .sources > a:is(:hover, :focus) {
-        color: rgba(23, 25, 30, 1);
+        color: rgba(255, 255, 255, 1);
       }
       @keyframes fade-in {
         from {
@@ -442,15 +474,18 @@ const meta: Meta = {
             const sources = res.sources.map(({ url, title }) =>
               h("a", { target: "_blank", href: url }, title)
             );
-            const bubble = h(
-              "li",
-              { class: "message" },
-              snarkdown(res.answer),
-              sources.length > 0
-                ? h("div", { class: "sources" }, ...sources)
-                : undefined
-            );
+            const bubble = h("li", { class: "message" }, snarkdown(res.answer));
             messages.appendChild(bubble);
+            if (sources.length > 0) {
+              messages.appendChild(
+                h(
+                  "li",
+                  { class: "sources" },
+                  h("h2", {}, "Resources"),
+                  ...sources
+                )
+              );
+            }
             bubble.scrollIntoView();
           }
         } catch (err) {
