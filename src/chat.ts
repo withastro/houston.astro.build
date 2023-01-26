@@ -1,5 +1,4 @@
-// const url = "https://round-shape-acdb.pika.workers.dev/ask";
-const url = "http://localhost:80/ask";
+const url = "https://round-shape-acdb.pika.workers.dev/ask";
 
 export async function chat(question: string) {
     const res = await fetch(url, {

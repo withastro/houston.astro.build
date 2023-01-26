@@ -2,10 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   astro: 2.0.0-beta.3
+  smartypants: ^0.1.6
   snarkdown: ^2.0.0
 
 dependencies:
   astro: 2.0.0-beta.3
+  smartypants: 0.1.6
   snarkdown: 2.0.0
 
 packages:
@@ -2470,6 +2472,11 @@ packages:
   /slash/4.0.0:
     resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}
     engines: {node: '>=12'}
+    dev: false
+
+  /smartypants/0.1.6:
+    resolution: {integrity: sha512-zGXh+Q6Y3OPTLM5x2HxAIkEAj4ZcePftmIOdIYozv2T+m03Sp5R4YppczKuo6IdnSMc99U+Wgvy8Mil0eeep7g==}
+    hasBin: true
     dev: false
 
   /snarkdown/2.0.0:

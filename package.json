@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "astro": "2.0.0-beta.3",
+    "smartypants": "^0.1.6",
     "snarkdown": "^2.0.0"
   }
 }

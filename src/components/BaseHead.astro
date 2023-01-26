@@ -1,0 +1,50 @@
+---
+import SEO from "./SEO.astro";
+
+export type Props = {
+  siteName: string;
+  title?: string;
+  description: string;
+  image: {
+    src: string;
+    alt: string;
+  };
+  canonicalURL?: URL;
+  pageType?: "website" | "article";
+};
+
+const twitterHandle = "astrodotbuild";
+
+const {
+  description,
+  image,
+  canonicalURL = new URL(Astro.request.url, Astro.site),
+  pageType = "website",
+  siteName,
+} = Astro.props as Props;
+
+const resolvedImageWithDomain = new URL(image.src, Astro.url).toString();
+const title = [Astro.props.title, siteName].filter(Boolean).join(" | ");
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="generator" content={Astro.generator} />
+<meta name="viewport" content="width=device-width" />
+<meta name="theme-color" content="#8D46E7" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="mask-icon" href="/favicon.svg" color="#8D46E7" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="RSS" />
+
+<title set:html={title} />
+
+<SEO
+  name={siteName}
+  title={title}
+  description={description}
+  image={{ src: resolvedImageWithDomain, alt: image.alt }}
+  twitter={{ handle: twitterHandle }}
+  og={{ type: pageType }}
+  canonicalURL={canonicalURL}
+/>

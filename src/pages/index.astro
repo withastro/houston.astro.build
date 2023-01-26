@@ -1,14 +1,20 @@
 ---
+import BaseHead, { Props as Meta } from "../components/BaseHead.astro";
 import Houston from "../components/Houston.astro";
+
+const meta: Meta = {
+  siteName: "Houston",
+  description: "",
+  image: {
+    src: "/social.png",
+    alt: "Houston",
+  },
+};
 ---
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Houston</title>
+    <BaseHead {...meta} />
   </head>
   <body>
     <header class="container">
@@ -55,42 +61,6 @@ import Houston from "../components/Houston.astro";
         </div>
       </form>
     </footer>
-    <template id="thumbs">
-      <li class="thumbs">
-        <button>
-          <span
-            ><svg
-              width="32"
-              height="33"
-              viewBox="0 0 32 33"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Thumbs Up</title>
-              <path
-                d="M26.745 10H20V8C20 5.2425 17.7575 3 15 3C14.6213 3 14.275 3.21375 14.105 3.5525L9.3825 13H4C2.8975 13 2 13.8975 2 15V26C2 27.1025 2.8975 28 4 28H25.2425C26.7438 27.9925 28.0175 26.865 28.205 25.3738L29.7038 13.3825C29.7213 13.25 29.73 13.115 29.73 12.98C29.7262 11.335 28.3863 10 26.745 10ZM3.99875 15H9V26H4V15H3.99875ZM27.7188 13.1263L26.2188 25.125C26.1562 25.6213 25.7312 25.9975 25.2362 26H11V14.2362L15.5887 5.0575C16.9625 5.3325 18 6.54625 18 8V11C18 11.5525 18.4475 12 19 12H26.7425C27.005 12 27.2525 12.1025 27.4387 12.2875C27.6262 12.4738 27.7287 12.7212 27.73 12.985C27.73 13.03 27.7275 13.0738 27.72 13.125L27.7188 13.1263Z"
-                fill="currentColor"></path>
-            </svg>
-          </span>
-        </button>
-        <button>
-          <span
-            ><svg
-              width="32"
-              height="33"
-              viewBox="0 0 32 33"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Thumbs Down</title>
-              <path
-                d="M29.705 20.6263L28.205 8.625C28.0175 7.135 26.7437 6.0075 25.2375 6H4C2.8975 6 2 6.8975 2 8V19C2 20.1025 2.8975 21 4 21H9.3825L14.1062 30.4475C14.275 30.7863 14.6213 31 15.0013 31C17.7588 31 20.0012 28.7575 20.0012 26V24H26.7437C27.5387 24 28.2875 23.6912 28.8512 23.13C29.4162 22.5675 29.73 21.8175 29.7313 21.02C29.7313 20.885 29.7225 20.75 29.7062 20.6263H29.705ZM9 19H4V8H9V19ZM27.4387 21.7125C27.2512 21.8987 27.0012 21.995 26.7375 22H19C18.4475 22 18 22.4475 18 23V26C18 27.4525 16.9625 28.6675 15.5887 28.9425L11 19.765V8H25.2325C25.7325 8.0025 26.1575 8.37875 26.22 8.87375L27.7213 20.8825C27.7275 20.9262 27.73 20.97 27.73 21.015C27.73 21.2788 27.6262 21.5262 27.4387 21.7125Z"
-                fill="currentColor"></path>
-            </svg>
-          </span>
-        </button>
-      </li>
-    </template>
 
     <style>
       :root {
@@ -405,9 +375,7 @@ import Houston from "../components/Houston.astro";
 
       const header = document.querySelector("header")!;
       const houston = document.querySelector("hey-houston")!;
-      // const thumbs = document.querySelector(
-      //   "template#thumbs"
-      // )! as HTMLTemplateElement;
+
       const h = (
         tag: string,
         props: Record<string, any> = {},
@@ -483,7 +451,6 @@ import Houston from "../components/Houston.astro";
                 : undefined
             );
             messages.appendChild(bubble);
-            // messages.appendChild(thumbs.content.cloneNode(true));
             bubble.scrollIntoView();
           }
         } catch (err) {
