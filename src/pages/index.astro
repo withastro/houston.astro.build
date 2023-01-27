@@ -7,8 +7,8 @@ import Houston from "../components/Houston.astro";
 export const prerender = true;
 
 const meta: Meta = {
-  siteName: "Houston",
-  description: "Experimental AI assistant for Astro developers",
+  siteName: "HoustonAI",
+  description: "HoustonAI is an experimental AI assistant, trained to answer questions from Astro developers. Powered by GPT-3, LangChain, and the Astro documentation website.",
   image: {
     src: "/social.png",
     alt: "Houston",
@@ -28,7 +28,7 @@ const meta: Meta = {
           <span>Hi. I'm <strong>HoustonAI.</strong></span>
         </p>
         <p class="intro-subtitle">
-          I've read the entire <a href="https://docs.astro.build/" target="_blank">Astro docs site</a> (a few thousand times). Ask me how to do different things in Astro and I'll do my best
+          I've read the entire <a href="https://docs.astro.build/" target="_blank">Astro docs site</a> (a few thousand times). Ask me how to do things in Astro and I'll do my best
           to answer!
         </p>
       </div>
@@ -203,6 +203,7 @@ const meta: Meta = {
       .autogrow {
         display: grid;
         overflow-y: scroll;
+        padding-left: 1px;
       }
       .autogrow > textarea {
         resize: none;
@@ -441,18 +442,27 @@ const meta: Meta = {
         }
         return node;
       };
+
       const messages = document.querySelector(".chat") as HTMLDivElement;
 
       async function handleSubmit(event: Event) {
         event.preventDefault();
+        if (houston.classList.contains("loading")) {
+          return;
+        }
         const form = event.target as HTMLFormElement;
         const textarea = form.message as HTMLTextAreaElement;
         let message = textarea.value;
         if (!message.trim()) {
-          if (header.classList.contains("inactive")) {
-            return;
-          } else {
+          if (textarea.placeholder === "Why should I use Astro?") {
             message = textarea.placeholder;
+            textarea.placeholder = "How does routing work?";
+          } else if (textarea.placeholder === "How does routing work?") {
+            message = textarea.placeholder;
+            textarea.placeholder = "Ask another question...";
+
+          } else {
+            return;
           }
         }
 
@@ -465,7 +475,6 @@ const meta: Meta = {
         bubble.scrollIntoView();
         header.classList.add("inactive");
 
-        textarea.placeholder = "Ask another question...";
         textarea.value = "";
         textarea.blur();
 
@@ -515,7 +524,7 @@ const meta: Meta = {
             bubble.appendChild(h("h5", {}, 
                 h("strong", {}, `Warning: Not all answers are correct! `),
                 h("span", {}, `Read carefully and `),
-                h("a", {href: "https://github.com/withastro/houston.astro.build/issues", target: '_blank'}, "report bad answers →")
+                h("a", {href: "https://github.com/withastro/houston.astro.build/issues", target: '_blank'}, "report bad answers on GitHub →")
                 ));
             bubble.scrollIntoView();
 
