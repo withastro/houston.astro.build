@@ -358,6 +358,12 @@ const meta: Meta = {
         z-index: -2;
         background: linear-gradient(247.23deg, #4af2c8 0%, #2f4cb3 100%);
       }
+      .sources h5 {
+        margin: 1rem 0 0rem;
+        font-size: 0.9rem;
+        font-style: italic;
+        font-weight: normal;;
+      }
       .sources h2 {
         margin: 0.5rem 0 0.25rem 0;
       }
@@ -466,7 +472,9 @@ const meta: Meta = {
         const thinking = houston.think();
         let emote: string = "default";
         try {
+          const delay = new Promise((r) => setTimeout(r, 3200));
           const res = await makeApiRequest(message);
+          await delay;
           emote = res.valid ? "haapy" : "disappointed";
 
           if (!res.valid) {
@@ -478,7 +486,6 @@ const meta: Meta = {
             messages.appendChild(bubble);
             bubble.scrollIntoView();
           } else {
-            debugger;
             const sources: any[] = res.sources
               .reduce(
                 (arr, item) =>
@@ -494,18 +501,26 @@ const meta: Meta = {
               "li",
               { class: "sources" },
               h("h2", {}, "Answer"),
-              h("span", {}, snarkdown(res.answer))
+              h("span", {}, snarkdown(res.answer)),
             );
             messages.appendChild(bubble);
+  
+
             if (sources.length > 0) {
               bubble.appendChild(h("h2", {}, "Resources"));
               sources.forEach((s) => bubble.appendChild(s));
             }
+
+
+            bubble.appendChild(h("h5", {}, 
+                h("strong", {}, `Warning: Not all answers are correct! `),
+                h("span", {}, `Read carefully and `),
+                h("a", {href: "https://github.com/withastro/houston.astro.build/issues", target: '_blank'}, "report bad answers →")
+                ));
             bubble.scrollIntoView();
 
-            const footer = document.querySelector(".footer")! as HTMLDivElement;
-            const footerLinks = footer.querySelector(".links") as HTMLDivElement;
-            footerLinks.appendChild(h("a", {href: "https://github.com/withastro/houston.astro.build/issues", target: '_blank'}, "Report Bad Answers →"));
+            // const footer = document.querySelector(".footer")! as HTMLDivElement;
+            // const footerLinks = footer.querySelector(".links") as HTMLDivElement;
           }
         } catch (err) {
           emote = "cry";
