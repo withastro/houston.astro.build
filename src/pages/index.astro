@@ -1,9 +1,8 @@
 ---
 import Footer from "../components/Footer.astro";
-import AlphaBadge from "../components/AlphaBadge.astro";
 import BaseHead, { Props as Meta } from "../components/BaseHead.astro";
 import Houston from "../components/Houston.astro";
-
+import Logo from '../components/Logo.astro';
 export const prerender = true;
 
 const meta: Meta = {
@@ -21,6 +20,7 @@ const meta: Meta = {
     <BaseHead {...meta} />
   </head>
   <body>
+    <Logo />
     <header class="container">
       <Houston glow />
       <div class="intro">
@@ -204,6 +204,9 @@ const meta: Meta = {
         display: grid;
         overflow-y: scroll;
         padding-left: 1px;
+      }
+      .autogrow::-webkit-scrollbar{
+        display: none;
       }
       .autogrow > textarea {
         resize: none;

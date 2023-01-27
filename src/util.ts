@@ -1,7 +1,9 @@
-// const url = "https://round-shape-acdb.pika.workers.dev/ask";
-
 export async function makeApiRequest(question: string) {
-    const res = await fetch('/api', {
+  
+    // NOTE: this is a workaround for the fact that Netlify times out 10sec requests,
+    // and sometimes these requests take longer than that.  Go back to "/api"
+    // if we can get that limit bumped up.
+    const res = await fetch('https://round-shape-acdb.pika.workers.dev/ask', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
