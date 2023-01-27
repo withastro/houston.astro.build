@@ -5,7 +5,7 @@ import netlify from "@astrojs/netlify/functions";
 
 // https://astro.build/config
 export default defineConfig({
-  site: process.env.DEPLOY_URL || 'https://houston.astro.build/',
+  site: 'https://houston.astro.build/', // process.env.DEPLOY_URL || 
   output: "server",
   adapter: netlify()
 });
