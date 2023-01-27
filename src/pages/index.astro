@@ -2,6 +2,7 @@
 import Footer from "../components/Footer.astro";
 import BaseHead, { Props as Meta } from "../components/BaseHead.astro";
 import Houston from "../components/Houston.astro";
+import HoustonAI from "../components/HoustonAI.astro";
 import Logo from "../components/Logo.astro";
 export const prerender = true;
 
@@ -26,14 +27,14 @@ const meta: Meta = {
       <Houston glow />
       <div class="intro">
         <p class="intro-title">
-          <span>Hi. I'm <strong>HoustonAI.</strong></span>
+          <HoustonAI />
         </p>
         <p class="intro-subtitle">
-          I've read the entire <a
+          Hi, I'm Houston! I've read the entire <a
             href="https://docs.astro.build/"
-            target="_blank">Astro docs site</a
-          > (a few thousand times). Ask me how to do things in Astro and I'll do
-          my best to answer!
+            target="_blank">Astro Docs</a
+          > (a few thousand times). Ask me how to do anything in Astro. I'll do my
+          best to answer!
         </p>
       </div>
     </header>
@@ -151,7 +152,8 @@ const meta: Meta = {
         text-align: left;
       }
       .intro .intro-title {
-        margin: 4rem 0 0 0;
+        margin: 2rem 0 0 0;
+        padding: 1rem 4rem;
         font-size: 2rem;
         display: inline-flex;
         align-items: center;
