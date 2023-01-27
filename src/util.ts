@@ -11,11 +11,19 @@ export async function makeApiRequest(question: string) {
         },
         body: JSON.stringify({ question })
     })
-    if (!res.ok) {
-      const { message } = await res.json();
-      throw new Error(message);
+    if (!res.ok || res.status >= 400) {
+      const { code, description } = await res.json();
+      const e = new Error(description);
+      e.cause = code;
+      throw e;
     }
     const data = await res.json();
+    if (data.code) {
+      const { code, description } = data;
+      const e = new Error(description);
+      e.cause = code;
+      throw e;
+    }
     const baseURLs = new Map();
     for (const source of data.sources) {
       const baseURL = source.url.split('#')[0];

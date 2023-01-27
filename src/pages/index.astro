@@ -565,14 +565,27 @@ const meta: Meta = {
             // const footerLinks = footer.querySelector(".links") as HTMLDivElement;
           }
         } catch (err) {
-          emote = "cry";
-          const bubble = h(
-            "li",
-            { class: "message error" },
-            `Something went wrong! Please try again.`
-          );
-          messages.appendChild(bubble);
-          bubble.scrollIntoView();
+          console.error(err);
+          const status = err.cause;
+          if (status == 400) {
+            emote = "disappointed";
+            const bubble = h(
+              "li",
+              { class: "message avoid error" },
+              `I'm not able to respond to content like this.`
+            );
+            messages.appendChild(bubble);
+            bubble.scrollIntoView();
+          } else {
+            emote = "disappointed";
+            const bubble = h(
+              "li",
+              { class: "message error" },
+              `Something went wrong! Please try again.`
+            );
+            messages.appendChild(bubble);
+            bubble.scrollIntoView();
+          }
         } finally {
           thinking.stop();
           houston.emote(emote);
