@@ -2,12 +2,13 @@
 import Footer from "../components/Footer.astro";
 import BaseHead, { Props as Meta } from "../components/BaseHead.astro";
 import Houston from "../components/Houston.astro";
-import Logo from '../components/Logo.astro';
+import Logo from "../components/Logo.astro";
 export const prerender = true;
 
 const meta: Meta = {
   siteName: "HoustonAI - The Astro AI Assistant",
-  description: "HoustonAI is an experimental AI assistant, trained to answer questions about Astro. Powered by Astro 2.0, GPT-3, LangChain, and the Astro documentation website.",
+  description:
+    "HoustonAI is an experimental AI assistant, trained to answer questions about Astro. Powered by Astro 2.0, GPT-3, LangChain, and the Astro documentation website.",
   image: {
     src: "/social.png",
     alt: "Houston",
@@ -28,8 +29,11 @@ const meta: Meta = {
           <span>Hi. I'm <strong>HoustonAI.</strong></span>
         </p>
         <p class="intro-subtitle">
-          I've read the entire <a href="https://docs.astro.build/" target="_blank">Astro docs site</a> (a few thousand times). Ask me how to do things in Astro and I'll do my best
-          to answer!
+          I've read the entire <a
+            href="https://docs.astro.build/"
+            target="_blank">Astro docs site</a
+          > (a few thousand times). Ask me how to do things in Astro and I'll do
+          my best to answer!
         </p>
       </div>
     </header>
@@ -205,7 +209,7 @@ const meta: Meta = {
         overflow-y: scroll;
         padding-left: 1px;
       }
-      .autogrow::-webkit-scrollbar{
+      .autogrow::-webkit-scrollbar {
         display: none;
       }
       .autogrow > textarea {
@@ -223,6 +227,7 @@ const meta: Meta = {
         font-size: 1.25rem;
         line-height: 1;
         border: 1px solid #343841;
+        border-bottom: 0;
         margin-left: -1px;
         margin-right: -1px;
 
@@ -337,7 +342,7 @@ const meta: Meta = {
         display: flex;
         flex-flow: column;
         gap: 0.33em;
-        padding: 1rem 1.5rem 1.5rem;
+        padding: 1rem 1.5rem;
         color: rgba(255, 255, 255, 0.8);
         font-family: "MD IO 0.5", system-ui, -apple-system, BlinkMacSystemFont;
       }
@@ -370,7 +375,6 @@ const meta: Meta = {
         color: white;
       }
 
-
       .sources h2 {
         margin: 0.5rem 0 0.25rem 0;
         color: white;
@@ -383,10 +387,10 @@ const meta: Meta = {
         white-space: nowrap;
       }
       .sources > a::before {
-        content: '> ';
-      display:inline-block;
-      margin-right: 8px;
-      opacity: 0.4;
+        content: "> ";
+        display: inline-block;
+        margin-right: 8px;
+        opacity: 0.4;
       }
       .sources > a:hover::before {
         opacity: 0.5;
@@ -476,7 +480,6 @@ const meta: Meta = {
           } else if (textarea.placeholder === "How does routing work?") {
             message = textarea.placeholder;
             textarea.placeholder = "Ask another question...";
-
           } else {
             return;
           }
@@ -526,22 +529,31 @@ const meta: Meta = {
               "li",
               { class: "sources" },
               h("h2", {}, "Answer"),
-              h("span", {}, snarkdown(res.answer)),
+              h("span", {}, snarkdown(res.answer))
             );
             messages.appendChild(bubble);
-  
 
             if (sources.length > 0) {
               bubble.appendChild(h("h2", {}, "Resources"));
               sources.forEach((s) => bubble.appendChild(s));
             }
 
-
-            bubble.appendChild(h("h5", {}, 
+            bubble.appendChild(
+              h(
+                "h5",
+                {},
                 h("strong", {}, `Warning: Not all answers are correct! `),
                 h("span", {}, `Read carefully and `),
-                h("a", {href: "https://github.com/withastro/houston.astro.build/issues", target: '_blank'}, "report bad answers on GitHub →")
-                ));
+                h(
+                  "a",
+                  {
+                    href: "https://github.com/withastro/houston.astro.build/issues",
+                    target: "_blank",
+                  },
+                  "report bad answers on GitHub →"
+                )
+              )
+            );
             bubble.scrollIntoView();
 
             // const footer = document.querySelector(".footer")! as HTMLDivElement;
