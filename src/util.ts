@@ -1,7 +1,7 @@
-const url = "https://round-shape-acdb.pika.workers.dev/ask";
+// const url = "https://round-shape-acdb.pika.workers.dev/ask";
 
-export async function chat(question: string) {
-    const res = await fetch(url, {
+export async function makeApiRequest(question: string) {
+    const res = await fetch('/api', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

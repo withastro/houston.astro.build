@@ -20,15 +20,23 @@ const meta: Meta = {
   </head>
   <body>
     <header class="container">
-      <Houston scale={0.8} glow />
+      <Houston glow />
       <div class="intro">
-        <p>Hey, I'm <strong>Houston</strong><AlphaBadge /></p>
-        <p>Ask me anything about Astro</p>
+        <p class="intro-title">
+          <span>Hi. I'm <strong>HoustonAI.</strong></span>
+        </p>
+        <p class="intro-subtitle">
+          I've read the entire <a href="https://docs.astro.build/" target="_blank">Astro docs site</a> (a few thousand times). Ask me how to do different things in Astro and I'll do my best
+          to answer!
+        </p>
       </div>
     </header>
     <main class="container">
       <ul class="chat"></ul>
     </main>
+    <div class="container">
+      <Footer />
+    </div>
     <footer class="container">
       <form action="#" onsubmit="handleSubmit(event)">
         <div class="autogrow">
@@ -37,7 +45,7 @@ const meta: Meta = {
             name="message"
             onkeydown="handleKeydown(event)"
             oninput="this.parentNode.dataset.value = this.value"
-            placeholder="Should I use Markdown or MDX?"
+            placeholder="Why should I use Astro?"
             cols="30"></textarea>
           <button type="submit">
             <svg
@@ -62,14 +70,11 @@ const meta: Meta = {
           </button>
         </div>
       </form>
-
-      <Footer />
     </footer>
 
     <style>
       :root {
         --container-width: 640px;
-        --chat-padding-top: 3rem;
       }
       :global(*) {
         box-sizing: border-box;
@@ -100,30 +105,32 @@ const meta: Meta = {
         background-repeat: repeat;
         pointer-events: none;
       }
-
+      @font-face {
+        font-family: "MD IO 0.5";
+        src: url("https://fonts-cdn.astro.build/MD IO/Web/MDIO0.5-Regular.woff2")
+          format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      a {
+        color: rgba(255, 255, 255, 0.8);
+      }
       .container {
         width: 100%;
         max-width: var(--container-width);
         margin-left: auto;
         margin-right: auto;
+        box-shadow: 0 0 40px 2px #17191e;
       }
       header {
-        flex-grow: 1;
         position: relative;
         margin: 0.75rem;
         padding: 1.25rem;
         display: flex;
         flex-direction: column;
-        text-align: center;
-        justify-content: center;
         align-items: center;
         margin-bottom: 0;
-      }
-      header.inactive {
-        flex-grow: 0;
-      }
-      header.inactive + main {
-        flex-grow: 1;
       }
       header.inactive .intro {
         display: none;
@@ -132,44 +139,39 @@ const meta: Meta = {
         user-select: none;
       }
       .intro {
-        font-size: 1.5rem;
+        max-width: 400px;
         color: white;
         transition: opacity 500ms ease-out;
+        text-align: left;
       }
-      .intro p {
-        margin: 0;
-        margin-top: 0.5em;
-      }
-      .intro p:first-child {
+      .intro .intro-title {
+        margin: 4rem 0 0 0;
         font-size: 2rem;
-        margin-top: 2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 8px;
+        justify-content: space-between;
       }
-      .intro strong {
-        margin-right: 0.5rem;
-      }
-      .intro p:nth-child(n + 2) {
+      .intro .intro-subtitle {
+        margin: 0.25rem 0 1rem 0;
         color: rgba(133, 139, 152, 1);
+        text-align: justify;
+        font-size: 1.3rem;
       }
-      .intro :global(svg) {
-        margin-right: -2rem !important;
-      }
-      header::after {
-        content: "";
-        position: absolute;
-        height: var(--chat-padding-top);
-        bottom: calc(var(--chat-padding-top) * -1);
-        left: 0;
-        right: 0;
-        background: linear-gradient(to bottom, #17191e, rgba(23, 25, 30, 0));
-        z-index: 1;
+      .learn-more-button {
+        background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+        padding: 8px 12px;
+        font-weight: bold;
       }
       main {
-        padding-top: var(--chat-padding-top);
         padding-left: 1rem;
         padding-right: 1rem;
         padding-bottom: 2rem;
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
         gap: 1rem;
         overflow-y: auto;
       }
@@ -181,8 +183,8 @@ const meta: Meta = {
 
       footer button {
         position: absolute;
-        right: 1rem;
-        top: 1rem;
+        right: 19px;
+        top: 19px;
         --size: 2.5rem;
         width: var(--size);
         height: var(--size);
@@ -198,24 +200,17 @@ const meta: Meta = {
 
       .autogrow {
         display: grid;
+        overflow-y: scroll;
       }
-      .autogrow::after {
-        content: attr(data-value) " ";
-        white-space: pre-wrap;
-        visibility: hidden;
-        max-height: 25vh;
-      }
-      textarea {
+      .autogrow > textarea {
         resize: none;
-        overflow: hidden;
-      }
-      .autogrow > textarea,
-      .autogrow::after {
         width: 100vw;
+        height: 80px;
         max-width: var(--container-width);
         outline: 0;
         flex-grow: 1;
-        padding: 1rem;
+        padding: 0.8rem;
+        padding-right: 68px;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
           Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
           sans-serif;
@@ -271,7 +266,7 @@ const meta: Meta = {
         --radius: 1.75rem;
         position: relative;
         border-radius: var(--radius);
-        grid-column: span 5 / -1;
+        grid-column: span 6 / -1;
         padding: 1rem 1.5rem;
         animation: fade-in 300ms ease-out forwards;
       }
@@ -283,10 +278,6 @@ const meta: Meta = {
         height: var(--size);
         width: var(--size);
         z-index: 2;
-      }
-      .chat > .message.defer {
-        animation: fade-in 300ms ease-out forwards,
-          shake 400ms 150ms ease-out forwards;
       }
       .chat > .message[data-user] {
         background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
@@ -340,9 +331,9 @@ const meta: Meta = {
         display: flex;
         flex-flow: column;
         gap: 0.33em;
-        padding: 1rem 1.5rem;
-        padding-bottom: 1.5rem;
+        padding: 1rem 1.5rem 1.5rem;
         color: white;
+        font-family: "MD IO 0.5", system-ui, -apple-system, BlinkMacSystemFont;
       }
       .sources::before,
       .sources::after {
@@ -366,11 +357,14 @@ const meta: Meta = {
         background: linear-gradient(247.23deg, #4af2c8 0%, #2f4cb3 100%);
       }
       .sources h2 {
-        margin: 0;
+        margin: 0.5rem 0 0.25rem 0;
       }
       .sources > a {
         display: block;
         color: rgba(255, 255, 255, 0.8);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
       .sources > a:is(:hover, :focus) {
         color: rgba(255, 255, 255, 1);
@@ -402,10 +396,20 @@ const meta: Meta = {
           transform: translateX(0);
         }
       }
+
+      @media (min-width: 640px) {
+        .chat > .message {
+          grid-column: span 5 / -1;
+        }
+        .autogrow > textarea {
+          border-top-right-radius: 12px;
+          border-top-left-radius: 12px;
+        }
+      }
     </style>
 
     <script>
-      import { chat } from "../chat";
+      import { makeApiRequest } from "../util";
       import snarkdown from "snarkdown";
 
       const header = document.querySelector("header")!;
@@ -429,24 +433,20 @@ const meta: Meta = {
         }
         return node;
       };
-      const rand = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
       const messages = document.querySelector(".chat") as HTMLDivElement;
-
-      const avoid = [
-        "Sorry, I'm not sure about that one.",
-        "Hmm... I don't know!",
-        "Huh, that's one even I don't know!",
-        "Wow, that's a tough one...",
-        "Unfortunately, I have no idea.",
-        "Hmm, I'm not sure.",
-      ];
 
       async function handleSubmit(event: Event) {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const textarea = form.message as HTMLTextAreaElement;
-        const message = textarea.value;
-        if (!message.trim()) return;
+        let message = textarea.value;
+        if (!message.trim()) {
+          if (header.classList.contains("inactive")) {
+            return;
+          } else {
+            message = textarea.placeholder;
+          }
+        }
 
         const bubble = h(
           "li",
@@ -457,39 +457,53 @@ const meta: Meta = {
         bubble.scrollIntoView();
         header.classList.add("inactive");
 
+        textarea.placeholder = "Ask another question...";
         textarea.value = "";
-        textarea.focus();
+        textarea.blur();
 
         const thinking = houston.think();
         let emote: string = "default";
         try {
-          const res = await chat(message);
+          const res = await makeApiRequest(message);
           emote = res.valid ? "haapy" : "disappointed";
+
           if (!res.valid) {
             const bubble = h(
               "li",
-              { class: "message defer" },
-              `${rand(avoid)}`
+              { class: "sources" },
+              `I don't know. Sorry!`
             );
             messages.appendChild(bubble);
             bubble.scrollIntoView();
           } else {
-            const sources = res.sources.map(({ url, title }) =>
-              h("a", { target: "_blank", href: url }, title)
+            debugger;
+            const sources: any[] = res.sources
+              .reduce(
+                (arr, item) =>
+                  arr.some((_item) => _item.title === item.title)
+                    ? arr
+                    : [...arr, item],
+                []
+              )
+              .map(({ url, title }) =>
+                h("a", { target: "_blank", href: url }, "> " + title)
+              );
+            const bubble = h(
+              "li",
+              { class: "sources" },
+              h("h2", {}, "Answer"),
+              h("span", {}, snarkdown(res.answer))
             );
-            const bubble = h("li", { class: "message" }, snarkdown(res.answer));
             messages.appendChild(bubble);
             if (sources.length > 0) {
-              messages.appendChild(
-                h(
-                  "li",
-                  { class: "sources" },
-                  h("h2", {}, "Resources"),
-                  ...sources
-                )
-              );
+              bubble.appendChild(h("h2", {}, "Resources"));
+              sources.forEach((s) => bubble.appendChild(s));
             }
             bubble.scrollIntoView();
+
+            const footer = document.querySelector(".footer")! as HTMLDivElement;
+            const footerLinks = footer.querySelector(".links") as HTMLDivElement;
+            footerLinks.appendChild(h("a", {href: "https://github.com/withastro/houston.astro.build/issues", target: '_blank'}, "Report Bad Answer →"));
           }
         } catch (err) {
           emote = "cry";

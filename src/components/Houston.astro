@@ -10,7 +10,6 @@ interface Props {
     | "sad"
     | "cry"
     | "wink";
-  scale?: number;
   theme?: "default" | "mono";
   glow?: boolean;
 }
@@ -19,14 +18,12 @@ const {
   pose = "default",
   glow = false,
   theme = "default",
-  scale = 1,
 } = Astro.props;
 ---
 
 <hey-houston
   class:list={{ glow, [`theme-${theme}`]: theme !== "default" }}
   pose={pose}
-  style={{ "--scale": scale }}
 >
   <div class="container">
     <div class="body">
@@ -190,6 +187,7 @@ const {
     }
 
     think() {
+      this.classList.add("active");
       this.classList.add("loading");
       return {
         stop: () => {
@@ -229,6 +227,8 @@ const {
     position: relative;
     aspect-ratio: 128 / 96;
     width: var(--size);
+    margin-top: 6rem;
+    transition: transform 300ms ease-in-out, margin-top 300ms ease-in-out;
     --border-squircle: polygon(
       100% 50%,
       100% 68.2%,
@@ -1066,6 +1066,10 @@ const {
   }
   hey-houston:hover .face {
     transform: translate(calc(var(--x) * 5%), calc(var(--y) * 25%));
+  }
+  hey-houston.active {
+    margin: -1rem 0 -1rem 0;
+    transform: scale(0.5);
   }
   .loading .face {
     --delay: 175ms;
