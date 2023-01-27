@@ -4,6 +4,8 @@ import AlphaBadge from "../components/AlphaBadge.astro";
 import BaseHead, { Props as Meta } from "../components/BaseHead.astro";
 import Houston from "../components/Houston.astro";
 
+export const prerender = true;
+
 const meta: Meta = {
   siteName: "Houston",
   description: "Experimental AI assistant for Astro developers",
