@@ -1,4 +1,4 @@
-export async function makeApiRequest(question: string) {
+export async function makeAskRequest(question: string) {
   
     // NOTE: this is a workaround for the fact that Netlify times out 10sec requests,
     // and sometimes these requests take longer than that.  Go back to "/api"
@@ -34,4 +34,18 @@ export async function makeApiRequest(question: string) {
     const sources = Array.from(baseURLs.values()).sort((a, b) => b.length - a.length).flat();
 
     return { ...data, sources }
+}
+
+export async function makeVoteRequest(vote: 0 | 1, question: string, answer: string, sources: string[]) {
+  // NOTE: this is a workaround for the fact that Netlify times out 10sec requests,
+  // and sometimes these requests take longer than that.  Go back to "/api"
+  // if we can get that limit bumped up.
+  const res = await fetch('https://round-shape-acdb.pika.workers.dev/vote', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ vote, question, answer, sources })
+  })
 }
