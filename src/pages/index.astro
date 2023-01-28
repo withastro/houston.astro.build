@@ -589,8 +589,8 @@ const meta: Meta = {
             emote = "disappointed";
             const bubble = h(
               "li",
-              { class: "message avoid error" },
-              `I'm not able to respond to content like this.`
+              { class: "sources" },
+              `I am unable to respond to content like this.`
             );
             messages.appendChild(bubble);
             bubble.scrollIntoView();
@@ -598,7 +598,7 @@ const meta: Meta = {
             emote = "disappointed";
             const bubble = h(
               "li",
-              { class: "message error" },
+              { class: "sources" },
               `Something went wrong! Please try again.`
             );
             messages.appendChild(bubble);
