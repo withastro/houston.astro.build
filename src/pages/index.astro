@@ -272,8 +272,24 @@ const meta: Meta = {
       code {
         padding: 0.125em 0.33em;
         border-radius: 0.33em;
-        font-size: 1rem;
+        font-size: inherit;
         background: rgba(255 255 255 / 10%);
+      }
+      .chat pre,
+      .chat code {
+        background: rgba(255 255 255 / 0.1);
+      }
+      .chat pre > code {
+        padding: 0;
+        border-radius: 0;
+        background: none;
+      }
+      .chat pre {
+        padding: 1rem 1.5rem;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        max-width: calc(100% + 3rem);
+        overflow-x: auto;
       }
       .chat > .message {
         --radius: 1.75rem;
@@ -318,9 +334,6 @@ const meta: Meta = {
           #d6d8e2 var(--size)
         );
         left: calc(var(--size) * -1);
-      }
-      .chat > .message[data-user] code {
-        background: rgba(255 255 255 / 0.15);
       }
       .chat > .message:not([data-user]) {
         background: linear-gradient(180deg, #ffffff, #d6d8e2);
