@@ -275,6 +275,10 @@ const meta: Meta = {
         color: rgb(255 255 255 / 100%);
       }
 
+      button.fill {
+        color: rgb(255 255 255 / 100%);
+      }
+
       .chat {
         margin-top: 1rem;
         display: grid;
@@ -591,15 +595,22 @@ const meta: Meta = {
                 document.querySelector("#thumbs")! as HTMLTemplateElement
               ).content.cloneNode(true)
             );
+            let voted = false;
             heading.addEventListener("click", (e) => {
-              const action = e.target?.closest("[data-action]")?.dataset.action as "good" | "bad";
-              // TODO: HERE!
-                makeVoteRequest(action === 'good' ? 1 : 0, '', '');
-              //    action, {
-              //   message,
-              //   answer: res.answer,
-              //   sources: res.sources,
-              // });
+              if (voted === true) return;
+              const target = (e.target as HTMLElement)?.closest(
+                "[data-action]"
+              ) as HTMLElement;
+              if (!target) return;
+              target.classList.add("fill");
+              const action = target.dataset.action as "good" | "bad";
+              voted = true;
+              makeVoteRequest(
+                action === "good" ? 1 : 0,
+                message,
+                res.answer,
+                res.sources
+              );
             });
             const bubble = h(
               "li",
