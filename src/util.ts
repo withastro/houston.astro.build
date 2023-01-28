@@ -48,5 +48,4 @@ export async function makeVoteRequest(vote: 0 | 1, question: string, answer: str
       },
       body: JSON.stringify({ vote, question, answer, sources })
   })
-  console.log(res.ok, res.status, await res.text());
 }
