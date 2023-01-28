@@ -35,3 +35,7 @@ export async function makeApiRequest(question: string) {
 
     return { ...data, sources }
 }
+
+export async function recordQuestionAnswer(reason: 'good' | 'bad', data: any) {
+  console.log(reason, data);
+}

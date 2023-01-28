@@ -4,6 +4,8 @@ import BaseHead, { Props as Meta } from "../components/BaseHead.astro";
 import Houston from "../components/Houston.astro";
 import HoustonAI from "../components/HoustonAI.astro";
 import Logo from "../components/Logo.astro";
+import ThumbsUp from "../components/ThumbsUp.astro";
+import ThumbsDown from "../components/ThumbsDown.astro";
 export const prerender = true;
 
 const meta: Meta = {
@@ -78,6 +80,17 @@ const meta: Meta = {
         </div>
       </form>
     </footer>
+
+    <template id="thumbs">
+      <div class="buttons">
+        <button data-action="good">
+          <span><ThumbsUp /></span>
+        </button>
+        <button data-action="bad">
+          <span><ThumbsDown /></span>
+        </button>
+      </div>
+    </template>
 
     <style>
       :root {
@@ -246,8 +259,20 @@ const meta: Meta = {
         border-color: white;
       }
 
-      button {
+      button[type="submit"] {
         background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+      }
+
+      button {
+        border: 0;
+        background: transparent;
+        margin: 0;
+        padding: 0;
+        color: rgb(255 255 255 / 60%);
+      }
+
+      button:hover {
+        color: rgb(255 255 255 / 100%);
       }
 
       .chat {
@@ -348,6 +373,16 @@ const meta: Meta = {
       }
       .message a:where(:visited) {
         color: #bc52ee;
+      }
+      .heading {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .heading svg {
+        --size: 24px;
+        width: var(--size);
+        height: var(--size);
       }
       .sources {
         position: relative;
@@ -461,7 +496,7 @@ const meta: Meta = {
     </style>
 
     <script>
-      import { makeApiRequest } from "../util";
+      import { makeApiRequest, recordQuestionAnswer } from "../util";
       import snarkdown from "snarkdown";
 
       const header = document.querySelector("header")!;
@@ -548,10 +583,27 @@ const meta: Meta = {
               .map(({ url, title }) =>
                 h("a", { target: "_blank", href: url }, title)
               );
+            const heading = h(
+              "div",
+              { class: "heading" },
+              h("h2", {}, "Answer"),
+              (
+                document.querySelector("#thumbs")! as HTMLTemplateElement
+              ).content.cloneNode(true)
+            );
+            heading.addEventListener("click", (e) => {
+              const action = e.target?.closest("[data-action]")?.dataset
+                .action as "good" | "bad";
+              recordQuestionAnswer(action, {
+                message,
+                answer: res.answer,
+                sources: res.sources,
+              });
+            });
             const bubble = h(
               "li",
               { class: "sources" },
-              h("h2", {}, "Answer"),
+              heading,
               h("span", {}, snarkdown(res.answer))
             );
             messages.appendChild(bubble);
