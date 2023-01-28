@@ -36,7 +36,7 @@ export async function makeAskRequest(question: string) {
     return { ...data, sources }
 }
 
-export async function makeVoteRequest(vote: 0 | 1, question: string, answer: string) {
+export async function makeVoteRequest(vote: 0 | 1, question: string, answer: string, sources: string[]) {
   // NOTE: this is a workaround for the fact that Netlify times out 10sec requests,
   // and sometimes these requests take longer than that.  Go back to "/api"
   // if we can get that limit bumped up.
@@ -46,7 +46,7 @@ export async function makeVoteRequest(vote: 0 | 1, question: string, answer: str
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ vote, question, answer })
+      body: JSON.stringify({ vote, question, answer, sources })
   })
   console.log(res.ok, res.status, await res.text());
 }
