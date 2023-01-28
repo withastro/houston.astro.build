@@ -264,6 +264,9 @@ const meta: Meta = {
       }
 
       button {
+        --size: 2rem;
+        width: var(--size);
+        height: var(--size);
         border: 0;
         background: transparent;
         margin: 0;
@@ -276,7 +279,9 @@ const meta: Meta = {
       }
 
       button.fill {
-        color: rgb(255 255 255 / 100%);
+        background: rgb(255 255 255 / 100%);
+        border-radius: 100%;
+        color: #17191e;
       }
 
       .chat {
