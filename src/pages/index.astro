@@ -496,7 +496,7 @@ const meta: Meta = {
     </style>
 
     <script>
-      import { makeApiRequest, recordQuestionAnswer } from "../util";
+      import { makeAskRequest, makeVoteRequest } from "../util";
       import snarkdown from "snarkdown";
 
       const header = document.querySelector("header")!;
@@ -559,7 +559,7 @@ const meta: Meta = {
         let emote: string = "default";
         try {
           const delay = new Promise((r) => setTimeout(r, 3200));
-          const res = await makeApiRequest(message);
+          const res = await makeAskRequest(message);
           await delay;
           emote = res.valid ? "haapy" : "disappointed";
 
@@ -592,13 +592,14 @@ const meta: Meta = {
               ).content.cloneNode(true)
             );
             heading.addEventListener("click", (e) => {
-              const action = e.target?.closest("[data-action]")?.dataset
-                .action as "good" | "bad";
-              recordQuestionAnswer(action, {
-                message,
-                answer: res.answer,
-                sources: res.sources,
-              });
+              const action = e.target?.closest("[data-action]")?.dataset.action as "good" | "bad";
+              // TODO: HERE!
+                makeVoteRequest(action === 'good' ? 1 : 0, '', '');
+              //    action, {
+              //   message,
+              //   answer: res.answer,
+              //   sources: res.sources,
+              // });
             });
             const bubble = h(
               "li",
