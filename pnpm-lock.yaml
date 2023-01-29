@@ -4,13 +4,11 @@ specifiers:
   '@astrojs/netlify': ^2.0.0
   astro: ^2.0.0
   smartypants: ^0.1.6
-  snarkdown: ^2.0.0
 
 dependencies:
   '@astrojs/netlify': 2.0.0_astro@2.0.2
   astro: 2.0.2
   smartypants: 0.1.6
-  snarkdown: 2.0.0
 
 packages:
 
@@ -2717,10 +2715,6 @@ packages:
   /smartypants/0.1.6:
     resolution: {integrity: sha512-zGXh+Q6Y3OPTLM5x2HxAIkEAj4ZcePftmIOdIYozv2T+m03Sp5R4YppczKuo6IdnSMc99U+Wgvy8Mil0eeep7g==}
     hasBin: true
-    dev: false
-
-  /snarkdown/2.0.0:
-    resolution: {integrity: sha512-MgL/7k/AZdXCTJiNgrO7chgDqaB9FGM/1Tvlcenenb7div6obaDATzs16JhFyHHBGodHT3B7RzRc5qk8pFhg3A==}
     dev: false
 
   /source-map-js/1.0.2:

@@ -505,8 +505,7 @@ const meta: Meta = {
     </style>
 
     <script>
-      import { makeAskRequest, makeVoteRequest } from "../util";
-      import snarkdown from "snarkdown";
+      import { makeAskRequest, makeVoteRequest, markdown } from "../util";
 
       const header = document.querySelector("header")!;
       const houston = document.querySelector("hey-houston")!;
@@ -544,7 +543,9 @@ const meta: Meta = {
           if (textarea.placeholder === "Why should I use Astro?") {
             message = textarea.placeholder;
             textarea.placeholder = "How does routing work?";
-          } else if (textarea.placeholder === "How does routing work in Astro?") {
+          } else if (
+            textarea.placeholder === "How does routing work in Astro?"
+          ) {
             message = textarea.placeholder;
             textarea.placeholder = "Ask another question...";
           } else {
@@ -555,7 +556,7 @@ const meta: Meta = {
         const bubble = h(
           "li",
           { class: "message", "data-user": "" },
-          snarkdown(message)
+          markdown(message)
         );
         messages.appendChild(bubble);
         bubble.scrollIntoView();
@@ -621,7 +622,7 @@ const meta: Meta = {
               "li",
               { class: "sources" },
               heading,
-              h("span", {}, snarkdown(res.answer))
+              h("span", {}, markdown(res.answer))
             );
             messages.appendChild(bubble);
 
@@ -634,7 +635,7 @@ const meta: Meta = {
               h(
                 "h5",
                 {},
-                h("strong", {}, `Warning: Not all answers are correct!`),
+                h("strong", {}, `Warning: Not all answers are correct!`)
               )
             );
             bubble.scrollIntoView();
