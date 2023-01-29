@@ -28,16 +28,18 @@ const meta: Meta = {
     <header class="container">
       <Houston glow />
       <div class="intro">
-        <p class="intro-title">
-          <HoustonAI />
-        </p>
-        <p class="intro-subtitle">
-          Hi, I'm Houston! I've read the entire <a
+        <div class="intro-content">
+          <p class="intro-title">
+            <HoustonAI />
+          </p>
+          <p class="intro-subtitle">
+            Hi, I'm Houston! I've read the entire <a
             href="https://docs.astro.build/"
             target="_blank">Astro Docs</a
-          > (a few thousand times). Ask me how to do anything in Astro. I'll do my
-          best to answer!
-        </p>
+            > (a few thousand times). Ask me how to do anything in Astro. I'll do my
+            best to answer!
+          </p>
+        </div>
       </div>
     </header>
     <main class="container">
@@ -148,7 +150,7 @@ const meta: Meta = {
       header {
         position: relative;
         margin: 0.75rem;
-        padding: 1.25rem;
+        padding: 0.75rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -161,10 +163,13 @@ const meta: Meta = {
         user-select: none;
       }
       .intro {
-        max-width: 400px;
+        max-width: 100%;
         color: white;
         transition: opacity 500ms ease-out;
         text-align: left;
+      }
+      .intro .intro-content {
+        max-width: 400px;
       }
       .intro .intro-title {
         margin: 2rem 0 0 0;
@@ -180,7 +185,7 @@ const meta: Meta = {
       .intro .intro-subtitle {
         margin: 0.25rem 0 1rem 0;
         color: rgba(133, 139, 152, 1);
-        text-align: justify;
+        text-align: left;
         font-size: 1.3rem;
         padding: 0 0.5rem;
       }
