@@ -6,11 +6,26 @@
     <a href="https://github.com/withastro/houston.astro.build" target="_blank"
       >Learn More →
     </a>
-    <a id="close-footer" href="#" onclick="this.parentNode.parentNode.remove();return false;">
+    <a id="close-footer" href="#">
       Close ✕
     </a>
   </div>
 </div>
+
+<script is:inline>
+  if (sessionStorage.getItem('notice:closed')) {
+    document.currentScript.previousElementSibling.remove();
+  }
+</script>
+
+<script>
+  const close = document.querySelector('#close-footer')!;
+  close.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.target.parentNode.parentNode.remove();
+    sessionStorage.setItem('notice:closed', 'true')
+  })
+</script>
 
 <style>
 
