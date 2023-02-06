@@ -20,11 +20,13 @@
 
 <script>
   const close = document.querySelector('#close-footer')!;
-  close.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.target.parentNode.parentNode.remove();
-    sessionStorage.setItem('notice:closed', 'true')
-  })
+  if(close) {
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.target.parentNode.parentNode.remove();
+      sessionStorage.setItem('notice:closed', 'true')
+    })
+  }
 </script>
 
 <style>
